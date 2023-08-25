@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   ImageBackground,
   StyleSheet,
   Text,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Octicons } from "@expo/vector-icons";
 import background from "../images/registration-bg.jpg";
 
 const initialState = {
@@ -39,9 +40,12 @@ const RegistrationScreen = () => {
     <View style={styles.container}>
       <ImageBackground source={background} style={styles.backgroundImage}>
         <View style={styles.innerContainer}>
-          <View>
-            <TouchableOpacity>
-              <AntDesign name="plus" size={25} color="#FF6C00" />;
+          <View style={styles.avatar}>
+            <TouchableOpacity
+              style={styles.addAvatar}
+              onPress={() => Alert.alert("Simple Button pressed")}
+            >
+              <Octicons name="plus-circle" size={25} color="#FF6C00" />
             </TouchableOpacity>
           </View>
           <Text style={styles.title}>Реєстрація</Text>
@@ -82,9 +86,18 @@ const RegistrationScreen = () => {
             onChangeText={onChangePassword}
           />
           <TouchableOpacity style={styles.showPassword}>
-            <Text style={styles.showPasswordText}>Показати</Text>
+            <Text
+              style={styles.showPasswordText}
+              onPress={() => Alert.alert("View details test")}
+            >
+              Показати
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.5}
+            onPress={() => Alert.alert("Register test")}
+          >
             <Text style={styles.titlebutton}>Зареєструватися</Text>
           </TouchableOpacity>
           <Text style={styles.titletext}>Вже є акаунт? Увійти</Text>
@@ -169,5 +182,22 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     textAlign: "center",
     marginTop: 16,
+  },
+  avatar: {
+    marginTop: -60,
+    height: 120,
+    width: 120,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+    alignSelf: "center",
+  },
+  addAvatar: {
+    marginTop: "65%",
+    left: "90%",
+    height: 25,
+    width: 25,
+    pointerEvents: "auto",
+    backgroundColor: "#fff",
+    borderRadius: 100,
   },
 });
