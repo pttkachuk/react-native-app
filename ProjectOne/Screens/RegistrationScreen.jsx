@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import {
   Alert,
   ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
@@ -23,6 +27,7 @@ const RegistrationScreen = () => {
   const [isLoginFocused, setIsLoginFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
 
   const onChangeLogin = (text) => {
     setState((prevState) => ({ ...prevState, nickname: text.trim() }));
@@ -36,74 +41,104 @@ const RegistrationScreen = () => {
     setState((prevState) => ({ ...prevState, password: text.trim() }));
   };
 
+  const onRegisterClick = () => {
+    Alert.alert("Welcome", `${state.email}`);
+    console.log(
+      `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <ImageBackground source={background} style={styles.backgroundImage}>
-        <View style={styles.innerContainer}>
-          <View style={styles.avatar}>
-            <TouchableOpacity
-              style={styles.addAvatar}
-              onPress={() => Alert.alert("Simple Button pressed")}
-            >
-              <Octicons name="plus-circle" size={25} color="#FF6C00" />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.title}>Реєстрація</Text>
-          <TextInput
-            style={[styles.input, isLoginFocused && styles.inputFocus]}
-            onFocus={() => {
-              setIsShowKeybord(true), setIsLoginFocused(true);
-              setIsEmailFocused(false);
-              setIsPasswordFocused(false);
-            }}
-            onBlur={() => setIsLoginFocused(false)}
-            placeholder="Логін"
-            value={state.nickname}
-            onChangeText={onChangeLogin}
-          />
-          <TextInput
-            style={[styles.input, isEmailFocused && styles.inputFocus]}
-            onFocus={() => {
-              setIsShowKeybord(true), setIsEmailFocused(true);
-              setIsLoginFocused(false);
-              setIsPasswordFocused(false);
-            }}
-            onBlur={() => setIsEmailFocused(false)}
-            placeholder="Адреса електронної пошти"
-            value={state.email}
-            onChangeText={onChangeEmail}
-          />
-          <TextInput
-            style={[styles.input, isPasswordFocused && styles.inputFocus]}
-            onFocus={() => {
-              setIsShowKeybord(true), setIsPasswordFocused(true);
-              setIsLoginFocused(false);
-              setIsEmailFocused(false);
-            }}
-            onBlur={() => setIsPasswordFocused(false)}
-            placeholder="Пароль"
-            value={state.password}
-            onChangeText={onChangePassword}
-          />
-          <TouchableOpacity style={styles.showPassword}>
-            <Text
-              style={styles.showPasswordText}
-              onPress={() => Alert.alert("View details test")}
-            >
-              Показати
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.5}
-            onPress={() => Alert.alert("Register test")}
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss(), setIsShowKeybord(false);
+      }}
+    >
+      <View style={styles.container}>
+        <ImageBackground source={background} style={styles.backgroundImage}>
+          <KeyboardAvoidingView
+            style={styles.containerKeyBoard}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={-240}
           >
-            <Text style={styles.titlebutton}>Зареєструватися</Text>
-          </TouchableOpacity>
-          <Text style={styles.titletext}>Вже є акаунт? Увійти</Text>
-        </View>
-      </ImageBackground>
-    </View>
+            <View
+              style={{
+                ...styles.innerContainer,
+                height: isShowKeybord ? 620 : 550,
+              }}
+            >
+              <View style={styles.avatar}>
+                <TouchableOpacity
+                  style={styles.addAvatar}
+                  onPress={() => Alert.alert("Simple Button pressed")}
+                >
+                  <Octicons name="plus-circle" size={25} color="#FF6C00" />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.title}>Реєстрація</Text>
+              <TextInput
+                style={[styles.input, isLoginFocused && styles.inputFocus]}
+                onFocus={() => {
+                  setIsShowKeybord(true), setIsLoginFocused(true);
+                  setIsEmailFocused(false);
+                  setIsPasswordFocused(false);
+                }}
+                onBlur={() => setIsLoginFocused(false)}
+                placeholder="Логін"
+                value={state.nickname}
+                onChangeText={onChangeLogin}
+              />
+              <TextInput
+                style={[styles.input, isEmailFocused && styles.inputFocus]}
+                onFocus={() => {
+                  setIsShowKeybord(true), setIsEmailFocused(true);
+                  setIsLoginFocused(false);
+                  setIsPasswordFocused(false);
+                }}
+                onBlur={() => setIsEmailFocused(false)}
+                placeholder="Адреса електронної пошти"
+                value={state.email}
+                onChangeText={onChangeEmail}
+                autoComplete="email"
+                keyboardType="email-address"
+              />
+              <TextInput
+                style={[styles.input, isPasswordFocused && styles.inputFocus]}
+                onFocus={() => {
+                  setIsShowKeybord(true), setIsPasswordFocused(true);
+                  setIsLoginFocused(false);
+                  setIsEmailFocused(false);
+                }}
+                onBlur={() => setIsPasswordFocused(false)}
+                placeholder="Пароль"
+                value={state.password}
+                onChangeText={onChangePassword}
+                autoComplete="password"
+                secureTextEntry={hidePassword}
+              />
+              <TouchableOpacity style={styles.showPassword}>
+                <Text
+                  style={styles.showPasswordText}
+                  onPress={() => {
+                    setHidePassword(!hidePassword);
+                  }}
+                >
+                  {hidePassword ? "Показати" : "Приховати"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                activeOpacity={0.5}
+                onPress={onRegisterClick}
+              >
+                <Text style={styles.titlebutton}>Зареєструватися</Text>
+              </TouchableOpacity>
+              <Text style={styles.titletext}>Вже є акаунт? Увійти</Text>
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -118,9 +153,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     width: "100%",
   },
+  containerKeyBoard: {
+    justifyContent: "flex-end",
+  },
   innerContainer: {
     width: "100%",
-    height: 550,
     alignItems: "center",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
