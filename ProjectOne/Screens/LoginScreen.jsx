@@ -100,8 +100,7 @@ const styles = StyleSheet.create({
     color: "#212121",
     textAlign: "center",
     fontSize: 30,
-    fontFamily: "Roboto",
-    fontWeight: 500,
+    fontFamily: "Roboto-Medium",
     lineHeight: 35,
     letterSpacing: 0.3,
     marginTop: 32,
@@ -132,9 +131,8 @@ const styles = StyleSheet.create({
   },
   titlebutton: {
     color: "#FFF",
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
-    fontWeight: 400,
   },
   showPassword: {
     top: -40,
@@ -142,14 +140,12 @@ const styles = StyleSheet.create({
   },
   showPasswordText: {
     color: "#1B4371",
-    fontFamily: "Roboto",
-    fontWeight: 400,
+    fontFamily: "Roboto-Regular",
   },
   titletext: {
     color: "#1B4371",
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
-    fontWeight: 400,
     textAlign: "center",
     marginTop: 16,
   },
