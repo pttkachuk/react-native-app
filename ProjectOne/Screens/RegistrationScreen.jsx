@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import background from "../images/registration-bg.jpg";
+import { useNavigation } from "@react-navigation/native";
 
 const initialState = {
   nickname: "",
@@ -22,6 +23,7 @@ const initialState = {
 };
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation();
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isLoginFocused, setIsLoginFocused] = useState(false);
@@ -42,10 +44,12 @@ const RegistrationScreen = () => {
   };
 
   const onRegisterClick = () => {
-    Alert.alert("Welcome", `${state.email}`);
+    //Alert.alert("Welcome", `${state.email}`);
     console.log(
       `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
     );
+    navigation.navigate("PostScreen");
+    setState(initialState);
   };
 
   return (
@@ -133,7 +137,15 @@ const RegistrationScreen = () => {
               >
                 <Text style={styles.titlebutton}>Зареєструватися</Text>
               </TouchableOpacity>
-              <Text style={styles.titletext}>Вже є акаунт? Увійти</Text>
+              <Text style={styles.titletext}>
+                Вже є акаунт?
+                <Text
+                  onPress={() => navigation.navigate("Login")}
+                  style={{ textDecorationLine: "underline" }}
+                >
+                  Увійти
+                </Text>
+              </Text>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
