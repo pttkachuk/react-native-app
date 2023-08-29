@@ -37,7 +37,7 @@ export default function App() {
           options={{ headerShown: false }}
           component={LoginScreen}
         />
-        <MainStack.Screen name="Home" component={Home} />
+        <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <MainStack.Screen
           name="CreatePostsScreen"
           component={CreatePostsScreen}
