@@ -37,7 +37,8 @@ const LoginScreen = () => {
   const onLoginClick = () => {
     //Alert.alert("Welcome", `${state.email}`);
     console.log(`Email:${state.email}, Password:${state.password}`);
-    navigation.navigate("PostScreen");
+    navigation.navigate("Home", { screen: "PostsScreen" });
+    setState(initialState);
   };
   return (
     <TouchableWithoutFeedback
