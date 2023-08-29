@@ -13,12 +13,14 @@ import {
   View,
 } from "react-native";
 import background from "../images/registration-bg.jpg";
+import { useNavigation } from "@react-navigation/native";
 const initialState = {
   email: "",
   password: "",
 };
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -33,8 +35,9 @@ const LoginScreen = () => {
   };
 
   const onLoginClick = () => {
-    Alert.alert("Welcome", `${state.email}`);
+    //Alert.alert("Welcome", `${state.email}`);
     console.log(`Email:${state.email}, Password:${state.password}`);
+    navigation.navigate("PostScreen");
   };
   return (
     <TouchableWithoutFeedback
@@ -102,7 +105,13 @@ const LoginScreen = () => {
                 <Text style={styles.titlebutton}>Увійти</Text>
               </TouchableOpacity>
               <Text style={styles.titletext}>
-                Немає акаунту? Зареєструватися
+                Немає акаунту?
+                <Text
+                  onPress={() => navigation.navigate("Registration")}
+                  style={{ textDecorationLine: "underline" }}
+                >
+                  Зареєструватися
+                </Text>
               </Text>
             </View>
           </KeyboardAvoidingView>
