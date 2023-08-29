@@ -35,7 +35,10 @@ const LoginScreen = () => {
   };
 
   const onLoginClick = () => {
-    //Alert.alert("Welcome", `${state.email}`);
+    if (!state.email || !state.password) {
+      Alert.alert("Заповніть всі поля!");
+      return;
+    }
     console.log(`Email:${state.email}, Password:${state.password}`);
     navigation.navigate("Home", { screen: "PostsScreen" });
     setState(initialState);

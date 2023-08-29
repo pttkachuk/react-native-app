@@ -44,7 +44,10 @@ const RegistrationScreen = () => {
   };
 
   const onRegisterClick = () => {
-    //Alert.alert("Welcome", `${state.email}`);
+    if (!state.nickname || !state.email || !state.password) {
+      Alert.alert("Заповніть всі поля!");
+      return;
+    }
     console.log(
       `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
     );
