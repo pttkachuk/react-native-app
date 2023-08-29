@@ -12,6 +12,7 @@ import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import MapScreen from "./Screens/MapScreen";
 import PostScreen from "./Screens/PostScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
+import { StatusBar } from "react-native";
 //////////////////////////////////////////////
 
 const MainStack = createStackNavigator();
@@ -47,6 +48,7 @@ export default function App() {
         <MainStack.Screen name="MapScreen" component={MapScreen} />
         <MainStack.Screen name="CommentsScreen" component={CommentsScreen} />
       </MainStack.Navigator>
+      <StatusBar />
     </NavigationContainer>
   );
 }
