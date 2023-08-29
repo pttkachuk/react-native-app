@@ -1,8 +1,12 @@
 import React from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 const ProfileScreen = () => {
-  return <View>ProfileScreen</View>;
+  return (
+    <View>
+      <Text>ProfileScreen</Text>
+    </View>
+  );
 };
 
 export default ProfileScreen;
