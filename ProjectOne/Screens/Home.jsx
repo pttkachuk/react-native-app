@@ -24,15 +24,15 @@ const Home = () => {
     return <Feather name="user" size={24} color={"#808080"} />;
   };
 
-  const CreatePostButton = () => (
-    <TouchableOpacity
-      style={styles.addButton}
-      activeOpacity={0.5}
-      onPress={() => navigation.navigate("CreatePostsScreen")}
-    >
-      <Feather name="plus" size={24} color="white" />
-    </TouchableOpacity>
-  );
+  // const CreatePostButton = () => {
+  //   <TouchableOpacity
+  //     style={styles.addButton}
+  //     activeOpacity={0.5}
+  //     //onPress={() => navigation.navigate("CreatePostsScreen")}
+  //   >
+  //     <Feather name="plus" size={24} color="white" />
+  //   </TouchableOpacity>;
+  // };
 
   const LogoutButton = () => (
     <TouchableOpacity
@@ -43,6 +43,19 @@ const Home = () => {
       <Feather name="log-out" size={24} color="#808080" />
     </TouchableOpacity>
   );
+
+  const goBack = () => {
+    return (
+      <View style={{ marginLeft: 16 }}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate("Публікації")}
+        >
+          <Ionicons name="arrow-back-sharp" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
   return (
     <Tabs.Navigator
       screenOptions={{
@@ -68,25 +81,19 @@ const Home = () => {
         name="Створити публікацію"
         component={CreatePostsScreen}
         options={{
-          headerTitle: () => <Text>Створити публікацію</Text>,
-          headerLeft: () => (
-            <View style={{ marginLeft: 16 }}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => navigation.goBack()}
-              >
-                <Ionicons name="arrow-back-sharp" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-          ),
-          tabBarIcon: CreatePostButton,
-          headerShown: true,
+          tabBarIcon: () => {
+            return (
+              <View style={styles.addButton}>
+                <Feather name="plus" size={24} color="white" />
+              </View>
+            );
+          },
+          headerLeft: goBack,
           tabBarStyle: { display: "none" },
-          headerTitleAlign: "center",
         }}
       />
       <Tabs.Screen
-        name="Profilescreen"
+        name="Профіль"
         component={ProfileScreen}
         options={{
           tabBarIcon: ProfileBottomIcon,
