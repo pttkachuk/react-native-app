@@ -8,7 +8,7 @@ import PostScreen from "./PostScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 //////////////////////////////////////////////
 
 const Tabs = createBottomTabNavigator();
@@ -16,11 +16,10 @@ const Tabs = createBottomTabNavigator();
 const Home = () => {
   const navigation = useNavigation();
   const PostBottomIcon = () => {
-    //<Feather name="grid" size={24} color={"#808080"} />;
-    <Ionicons name="grid-outline" size={24} color="black" />;
+    return <Ionicons name="grid-outline" size={24} color="black" />;
   };
   const ProfileBottomIcon = () => {
-    <Feather name="user" size={24} color={"black"} />;
+    return <Feather name="user" size={24} color={"black"} />;
   };
   const CreatePostButton = () => (
     <TouchableOpacity
