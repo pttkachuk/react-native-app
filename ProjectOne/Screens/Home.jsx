@@ -15,12 +15,15 @@ const Tabs = createBottomTabNavigator();
 
 const Home = () => {
   const navigation = useNavigation();
+
   const PostBottomIcon = () => {
-    return <Ionicons name="grid-outline" size={24} color="black" />;
+    return <Ionicons name="grid-outline" size={24} color="#808080" />;
   };
+
   const ProfileBottomIcon = () => {
-    return <Feather name="user" size={24} color={"black"} />;
+    return <Feather name="user" size={24} color={"#808080"} />;
   };
+
   const CreatePostButton = () => (
     <TouchableOpacity
       style={styles.addButton}
@@ -30,6 +33,7 @@ const Home = () => {
       <Feather name="plus" size={24} color="white" />
     </TouchableOpacity>
   );
+
   const LogoutButton = () => (
     <TouchableOpacity
       style={{ paddingRight: 20 }}
@@ -43,7 +47,12 @@ const Home = () => {
     <Tabs.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarStyle: { height: 80 },
+        tabBarStyle: {
+          height: 80,
+          paddingHorizontal: 70,
+          borderTopColor: "#808080",
+          backgroundColor: "#fff",
+        },
       }}
     >
       <Tabs.Screen
@@ -52,12 +61,11 @@ const Home = () => {
         options={{
           tabBarIcon: PostBottomIcon,
           headerTitleAlign: "center",
-          //headerRightContainerStyle: { paddingRight: 20 },
           headerRight: LogoutButton,
         }}
       />
       <Tabs.Screen
-        name="CreatePostsScreen"
+        name="Створити публікацію"
         component={CreatePostsScreen}
         options={{
           headerTitle: () => <Text>Створити публікацію</Text>,
@@ -82,7 +90,7 @@ const Home = () => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ProfileBottomIcon,
-          headerShown: false,
+          headerShown: true,
         }}
       />
     </Tabs.Navigator>
