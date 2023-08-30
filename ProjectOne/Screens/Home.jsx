@@ -24,16 +24,6 @@ const Home = () => {
     return <Feather name="user" size={24} color={"#808080"} />;
   };
 
-  // const CreatePostButton = () => {
-  //   <TouchableOpacity
-  //     style={styles.addButton}
-  //     activeOpacity={0.5}
-  //     //onPress={() => navigation.navigate("CreatePostsScreen")}
-  //   >
-  //     <Feather name="plus" size={24} color="white" />
-  //   </TouchableOpacity>;
-  // };
-
   const LogoutButton = () => (
     <TouchableOpacity
       style={{ paddingRight: 20 }}
