@@ -1,19 +1,39 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import MapView, { Marker } from "react-native-maps";
 
 const MapScreen = () => {
+  const route = useRoute();
+  const coords = route.params?.coords;
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "white",
-      }}
-    >
-      <Text>MapScreen</Text>
+    <View style={styles.container}>
+      <MapView
+        style={styles.mapStyle}
+        region={{
+          ...coords,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        mapType="standard"
+        minZoomLevel={1}
+      >
+        {coords && <Marker title="You are here" coordinate={coords} />}
+      </MapView>
     </View>
   );
 };
 
 export default MapScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  mapStyle: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+});
