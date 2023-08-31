@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
 
