@@ -30,7 +30,7 @@ const Home = () => {
       activeOpacity={0.5}
       onPress={() => navigation.navigate("Login")}
     >
-      <Feather name="log-out" size={24} color="#808080" />
+      <Feather name="log-out" size={24} color="#BDBDBD" />
     </TouchableOpacity>
   );
 
@@ -41,7 +41,7 @@ const Home = () => {
           activeOpacity={0.5}
           onPress={() => navigation.navigate("Публікації")}
         >
-          <Ionicons name="arrow-back-sharp" size={24} color="black" />
+          <Ionicons name="arrow-back-sharp" size={24} color="#212121" />
         </TouchableOpacity>
       </View>
     );
