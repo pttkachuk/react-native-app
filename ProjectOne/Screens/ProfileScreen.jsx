@@ -11,8 +11,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   return (
     <ImageBackground
       resizeMode="cover"
@@ -20,7 +22,11 @@ const ProfileScreen = () => {
       style={styles.bgImage}
     >
       <View style={styles.wrapper}>
-        <TouchableOpacity style={{ position: "absolute", right: 16, top: 22 }}>
+        <TouchableOpacity
+          style={{ position: "absolute", right: 16, top: 22 }}
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate("Login")}
+        >
           <Feather name="log-out" size={24} color="#BDBDBD" />
         </TouchableOpacity>
         <View style={styles.photoContainer}>
