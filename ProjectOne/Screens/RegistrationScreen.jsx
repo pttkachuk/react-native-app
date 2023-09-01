@@ -79,7 +79,7 @@ const RegistrationScreen = () => {
                   style={styles.addAvatar}
                   onPress={() => Alert.alert("Simple Button pressed")}
                 >
-                  <Octicons name="plus-circle" size={25} color="#FF6C00" />
+                  <Octicons name="plus-circle" size={23} color="#FF6C00" />
                 </TouchableOpacity>
               </View>
               <Text style={styles.title}>Реєстрація</Text>
