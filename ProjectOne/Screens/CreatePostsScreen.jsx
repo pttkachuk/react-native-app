@@ -78,6 +78,7 @@ const CreatePostsScreen = () => {
   const PostPhoto = () => {
     navigation.navigate("Публікації");
     deletePost();
+    console.log(`Photo:${photo}, Title:${title}, Location:${photoLocation}`);
   };
 
   return (
