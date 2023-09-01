@@ -64,6 +64,7 @@ const CreatePostsScreen = () => {
   const makePhoto = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
+      await MediaLibrary.createAssetAsync(uri);
       setPhoto(uri);
     }
   };
