@@ -3,9 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import * as Location from "expo-location";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import { Ionicons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useIsFocused } from "@react-navigation/native";
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -23,10 +22,6 @@ const CreatePostsScreen = () => {
   const navigation = useNavigation();
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const [location, setLocation] = useState(null);
-
-  //const name = useSelector(getUserName);
-  //const userId = useSelector(getUserId);
 
   const [photo, setPhoto] = useState("");
   const [title, setTitle] = useState("");
@@ -36,7 +31,6 @@ const CreatePostsScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [isFocused, setIsFocused] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -80,6 +74,10 @@ const CreatePostsScreen = () => {
     setPhotoLocation("");
   };
 
+  const PostPhoto = () => {
+    navigation.navigate("Публікації");
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -88,14 +86,7 @@ const CreatePostsScreen = () => {
           flex: 1,
         }}
       >
-        <View
-          style={[
-            styles.container,
-            {
-              paddingBottom: isKeyboardVisible ? 50 : 34,
-            },
-          ]}
-        >
+        <View style={styles.container}>
           <View>
             {photo ? (
               <View style={styles.photoContainer}>
@@ -107,6 +98,19 @@ const CreatePostsScreen = () => {
                 type={type}
                 ref={setCameraRef}
               >
+                <MaterialCommunityIcons
+                  name="camera-flip"
+                  size={22}
+                  color={"#BDBDBD"}
+                  style={styles.flipContainer}
+                  onPress={() => {
+                    setType(
+                      type === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                    );
+                  }}
+                />
                 <TouchableOpacity onPress={makePhoto}>
                   <View style={styles.photoIcon}>
                     <Ionicons name="ios-camera" size={24} color={"#BDBDBD"} />
@@ -115,7 +119,11 @@ const CreatePostsScreen = () => {
               </Camera>
             )}
 
-            <Text style={styles.text}>Завантажте фото</Text>
+            {photo ? (
+              <Text style={styles.text}>Редагувати фото</Text>
+            ) : (
+              <Text style={styles.text}>Завантажте фото</Text>
+            )}
             <View>
               <TextInput
                 style={styles.input}
@@ -126,12 +134,7 @@ const CreatePostsScreen = () => {
                 onBlur={() => setIsKeyboardVisible(false)}
               />
               <View style={[styles.input, styles.locationInputContainer]}>
-                <Feather
-                  name="map-pin"
-                  size={24}
-                  color={"#BDBDBD"}
-                  //style={styles.locationIcon}
-                />
+                <Feather name="map-pin" size={24} color={"#BDBDBD"} />
                 <TextInput
                   style={[styles.input, styles.locationInput]}
                   placeholder="Місцевість..."
@@ -142,22 +145,35 @@ const CreatePostsScreen = () => {
                 />
               </View>
             </View>
-            {title !== "" && photoLocation !== "" && photo !== null ? (
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Опубліковати</Text>
-              </TouchableOpacity>
-            ) : (
-              <View style={styles.disabledButton}>
-                <Text style={styles.disabledButtonText}>Опубліковати</Text>
-              </View>
-            )}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              disabled={photo && title && photoLocation ? false : true}
+              style={{
+                ...styles.button,
+                backgroundColor:
+                  photo && title && photoLocation ? "#FF6C00" : "#F6F6F6",
+              }}
+              onPress={PostPhoto}
+            >
+              <Text
+                style={{
+                  ...styles.title,
+                  color:
+                    photo && title && photoLocation ? "#FFFFFF" : "#BDBDBD",
+                }}
+              >
+                Опублікувати
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View style={{ flex: 1 }} />
-          <TouchableOpacity onPress={deletePost}>
-            <View style={styles.bottomContainer}>
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity
+              onPress={deletePost}
+              disabled={photo || title || photoLocation ? false : true}
+            >
               <Feather name="trash-2" size={24} color={"#BDBDBD"} />
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -168,49 +184,38 @@ export default CreatePostsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //display: "flex",
-    //justifyContent: "flex-end",
     backgroundColor: "#fff",
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 32,
   },
-
   photoContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-
     width: "100%",
     height: 240,
-
     backgroundColor: "#F6F6F6",
-
     borderWidth: 1,
     borderColor: "#E8E8E8",
     borderRadius: 8,
     marginBottom: 8,
+    overflow: "hidden",
   },
-
   photoIcon: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-
     width: 60,
     height: 60,
-
-    backgroundColor: "white",
-
+    backgroundColor: "#fff",
     borderRadius: 30,
   },
-
   photo: {
     width: "100%",
     height: "100%",
     borderRadius: 8,
   },
-
   text: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
@@ -218,86 +223,56 @@ const styles = StyleSheet.create({
     color: "#BDBDBD",
     marginBottom: 32,
   },
-
+  flipContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
   input: {
     height: 50,
-
     marginBottom: 16,
-
     fontFamily: "Roboto-Regular",
     fontSize: 16,
-
     borderBottomWidth: 1,
     borderColor: "#E8E8E8",
   },
-
   locationInputContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 4,
-
     marginBottom: 32,
   },
-
   locationInput: {
     flex: 1,
-
     marginBottom: 0,
-
     borderBottomWidth: 0,
-
     fontFamily: "Roboto-Regular",
   },
-
   bottomContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-
+    marginTop: 145,
     width: 70,
     height: 40,
-
     backgroundColor: "#F6F6F6",
-
     borderRadius: 20,
   },
-  disabledButton: {
-    paddingTop: 16,
-    paddingBottom: 16,
-
-    backgroundColor: "#F6F6F6",
-
-    borderRadius: 100,
-  },
-  disabledButtonText: {
-    textAlign: "center",
-
-    fontFamily: "Roboto-Regular",
-    fontWeight: 400,
-    fontSize: 16,
-    lineHeight: 18.75,
-
-    color: "#BDBDBD",
-  },
   button: {
+    marginBottom: 10,
     paddingTop: 16,
     paddingBottom: 16,
-
-    backgroundColor: "#FF6C00",
-
+    backgroundColor: "#F6F6F6",
     borderRadius: 100,
-  },
-  buttonText: {
     textAlign: "center",
-
+  },
+  title: {
+    textAlign: "center",
     fontFamily: "Roboto-Regular",
-    fontWeight: 400,
+    color: "#FFFFFF",
     fontSize: 16,
-    lineHeight: 18.75,
-
-    color: "white",
   },
 });
