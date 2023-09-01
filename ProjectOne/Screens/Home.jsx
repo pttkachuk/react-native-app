@@ -87,7 +87,7 @@ const Home = () => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ProfileBottomIcon,
-          headerShown: true,
+          headerShown: false,
         }}
       />
     </Tabs.Navigator>
