@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import ProfilePost from "../components/ProfilePost";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -36,6 +37,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
         <Text style={styles.text}>Name Surname</Text>
+        <ProfilePost />
       </View>
     </ImageBackground>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import Avatar from "../images/profile-img.jpg";
+import ProfilePost from "../components/ProfilePost";
 
 const PostScreen = () => {
   return (
@@ -12,6 +13,7 @@ const PostScreen = () => {
           <Text style={styles.userEmail}>example@mail.com</Text>
         </View>
       </View>
+      <ProfilePost />
     </View>
   );
 };
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
   userInfo: {
     flexDirection: "row",
     gap: 8,
+    marginBottom: 32,
   },
   avatar: {
     width: 60,
