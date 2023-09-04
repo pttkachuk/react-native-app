@@ -48,12 +48,20 @@ export default function App() {
         />
         {/* <MainStack.Screen name="PostScreen" component={PostScreen} /> */}
         {/* <MainStack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
-        <MainStack.Screen name="MapScreen" component={MapScreen} />
+        <MainStack.Screen name="MapScreen" component={MapScreen} options={{
+          title: "Мапа",
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerLeft: () => <GoBackButton />,
+        }} />
         <MainStack.Screen name="CommentsScreen" component={CommentsScreen} options={{
           title: "Коментарі",
           headerTitleAlign: "center",
           headerShown: true,
           headerLeft: () => <GoBackButton />,
+          headerStyle: {
+            borderBottomWidth: 1,
+          },
         }} />
       </MainStack.Navigator>
       <StatusBar />
