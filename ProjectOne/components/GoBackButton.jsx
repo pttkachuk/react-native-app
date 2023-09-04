@@ -7,10 +7,7 @@ const GoBackButton = () => {
   const navigation = useNavigation();
   return (
     <View style={{ marginLeft: 16 }}>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={() => navigation.navigate("Публікації")}
-      >
+      <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back-sharp" size={24} color="#212121" />
       </TouchableOpacity>
     </View>
