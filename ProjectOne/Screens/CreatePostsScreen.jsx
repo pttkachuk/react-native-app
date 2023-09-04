@@ -61,6 +61,18 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
+  // const getLocation = async () => {
+  //   try {
+  //     const address = await Location.reverseGeocodeAsync({
+  //       latitude: coords.coords.latitude,
+  //       longitude: coords.coords.longitude,
+  //     });
+  //     setPhotoLocation(`${address[0].city}, ${address[0].country}`);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const makePhoto = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
