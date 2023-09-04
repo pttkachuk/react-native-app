@@ -1,4 +1,5 @@
 import { useFonts } from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,7 +13,8 @@ import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import MapScreen from "./Screens/MapScreen";
 import PostScreen from "./Screens/PostScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
-import { StatusBar } from "react-native";
+import { StatusBar, TouchableOpacity, View } from "react-native";
+import GoBackButton from "./components/GoBackButton";
 //////////////////////////////////////////////
 
 const MainStack = createStackNavigator();
@@ -44,10 +46,15 @@ export default function App() {
           name="CreatePostsScreen"
           component={CreatePostsScreen}
         />
-        <MainStack.Screen name="PostScreen" component={PostScreen} />
-        <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
+        {/* <MainStack.Screen name="PostScreen" component={PostScreen} /> */}
+        {/* <MainStack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
         <MainStack.Screen name="MapScreen" component={MapScreen} />
-        <MainStack.Screen name="CommentsScreen" component={CommentsScreen} />
+        <MainStack.Screen name="CommentsScreen" component={CommentsScreen} options={{
+          title: "Коментарі",
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerLeft: () => <GoBackButton />,
+        }} />
       </MainStack.Navigator>
       <StatusBar />
     </NavigationContainer>
