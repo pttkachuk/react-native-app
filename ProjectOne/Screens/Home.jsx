@@ -9,6 +9,7 @@ import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import GoBackButton from "../components/GoBackButton";
 //////////////////////////////////////////////
 
 const Tabs = createBottomTabNavigator();
@@ -34,18 +35,18 @@ const Home = () => {
     </TouchableOpacity>
   );
 
-  const goBack = () => {
-    return (
-      <View style={{ marginLeft: 16 }}>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate("Публікації")}
-        >
-          <Ionicons name="arrow-back-sharp" size={24} color="#212121" />
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  // const goBack = () => {
+  //   return (
+  //     <View style={{ marginLeft: 16 }}>
+  //       <TouchableOpacity
+  //         activeOpacity={0.5}
+  //         onPress={() => navigation.navigate("Публікації")}
+  //       >
+  //         <Ionicons name="arrow-back-sharp" size={24} color="#212121" />
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
   return (
     <Tabs.Navigator
       screenOptions={{
@@ -78,7 +79,7 @@ const Home = () => {
               </View>
             );
           },
-          headerLeft: goBack,
+          headerLeft: () => <GoBackButton />,
           tabBarStyle: { display: "none" },
         }}
       />
