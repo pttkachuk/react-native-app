@@ -20,12 +20,13 @@ import {
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
-
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const [photo, setPhoto] = useState("");
   const [title, setTitle] = useState("");
   const [photoLocation, setPhotoLocation] = useState("");
+  // const [newLat, setNewLat] = useState(null);
+  // const [newLong, setNewLong] = useState(null);
 
   //const [geoLocation, setGeoLocation] = useState("");
   //const [croods, setCroods] = useState(null);
@@ -74,6 +75,12 @@ const CreatePostsScreen = () => {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
+    // const latItude = location.coords.latitude;
+    // const longItude = location.coords.longitude;
+    // setNewLat(latItude);
+    // setNewLong(longItude);
+
+    // console.log("First test", `Lat:${newLat}, Long:${newLong}`);
     setPhotoLocation(`${address[0].city}, ${address[0].country}`);
   };
 
@@ -84,6 +91,7 @@ const CreatePostsScreen = () => {
   };
 
   const PostPhoto = () => {
+    console.log(`Coordinates${newLat}, ${newLong}`);
     navigation.navigate("Публікації");
     deletePost();
     console.log(`Photo:${photo}, Title:${title}, Location:${photoLocation}`);
