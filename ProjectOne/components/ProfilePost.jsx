@@ -17,18 +17,14 @@ const ProfilePost = () => {
   return (
     <View style={{ marginBottom: 32 }}>
       <View style={{ marginBottom: 8 }}>
-        <Image
-          source={Test}
-          resizeMode={"cover"}
-          style={{ width: "100%", height: 240, borderRadius: 8 }}
-        />
+        <Image source={Test} resizeMode={"cover"} style={styles.image} />
       </View>
       <Text style={styles.name}>forest</Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ flexDirection: "row", gap: 24 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <TouchableOpacity onPress={handleCommentsRedirect}>
-              <Ionicons name="chatbubble-sharp" size={24} color="#FF6C00" />
+              <Ionicons name="chatbubble-outline" size={24} color="#FF6C00" />
             </TouchableOpacity>
 
             <Text style={styles.text}>4</Text>
@@ -72,5 +68,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 18.75,
     color: "#212121",
+  },
+  image: {
+    width: "100%",
+    height: 240,
+    borderRadius: 8,
   },
 });
