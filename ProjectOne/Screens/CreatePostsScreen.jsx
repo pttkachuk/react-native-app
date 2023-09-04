@@ -26,7 +26,9 @@ const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState("");
   const [title, setTitle] = useState("");
   const [photoLocation, setPhotoLocation] = useState("");
-  const [geoLocation, setGeoLocation] = useState("");
+
+  //const [geoLocation, setGeoLocation] = useState("");
+  //const [croods, setCroods] = useState(null);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -45,12 +47,12 @@ const CreatePostsScreen = () => {
         console.log("Permission to access location was denied");
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setGeoLocation(coords);
+      // let location = await Location.getCurrentPositionAsync({});
+      // const coords = {
+      //   latitude: location.coords.latitude,
+      //   longitude: location.coords.longitude,
+      // };
+      // setGeoLocation(coords);
     })();
   }, []);
 
@@ -61,24 +63,18 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
-  // const getLocation = async () => {
-  //   try {
-  //     const address = await Location.reverseGeocodeAsync({
-  //       latitude: coords.coords.latitude,
-  //       longitude: coords.coords.longitude,
-  //     });
-  //     setPhotoLocation(`${address[0].city}, ${address[0].country}`);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const makePhoto = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
       await MediaLibrary.createAssetAsync(uri);
       setPhoto(uri);
     }
+    let location = await Location.getCurrentPositionAsync({});
+    const address = await Location.reverseGeocodeAsync({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+    setPhotoLocation(`${address[0].city}, ${address[0].country}`);
   };
 
   const deletePost = () => {
@@ -154,7 +150,7 @@ const CreatePostsScreen = () => {
                   style={[styles.input, styles.locationInput]}
                   placeholder="Місцевість..."
                   value={photoLocation}
-                  onChangeText={(value) => setPhotoLocation(value)}
+                  //onChangeText={(value) => setPhotoLocation(value)}
                   onFocus={() => setIsKeyboardVisible(true)}
                   onBlur={() => setIsKeyboardVisible(false)}
                 />
