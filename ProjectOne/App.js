@@ -15,6 +15,9 @@ import PostScreen from "./Screens/PostScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import { StatusBar, TouchableOpacity, View } from "react-native";
 import GoBackButton from "./components/GoBackButton";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 //////////////////////////////////////////////
 
 const MainStack = createStackNavigator();
@@ -29,42 +32,46 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="RegisterScreen">
-        <MainStack.Screen
-          name="Registration"
-          options={{ headerShown: false }}
-          component={RegistrationScreen}
-        />
-        <MainStack.Screen
-          name="Login"
-          options={{ headerShown: false }}
-          component={LoginScreen}
-        />
-        <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <MainStack.Screen
-          name="CreatePostsScreen"
-          component={CreatePostsScreen}
-        />
-        {/* <MainStack.Screen name="PostScreen" component={PostScreen} /> */}
-        {/* <MainStack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
-        <MainStack.Screen name="MapScreen" component={MapScreen} options={{
-          title: "Мапа",
-          headerTitleAlign: "center",
-          headerShown: true,
-          headerLeft: () => <GoBackButton />,
-        }} />
-        <MainStack.Screen name="CommentsScreen" component={CommentsScreen} options={{
-          title: "Коментарі",
-          headerTitleAlign: "center",
-          headerShown: true,
-          headerLeft: () => <GoBackButton />,
-          headerStyle: {
-            borderBottomWidth: 1,
-          },
-        }} />
-      </MainStack.Navigator>
-      <StatusBar />
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate persistor={store.persistor}>
+        <NavigationContainer>
+          <MainStack.Navigator initialRouteName="RegisterScreen">
+            <MainStack.Screen
+              name="Registration"
+              options={{ headerShown: false }}
+              component={RegistrationScreen}
+            />
+            <MainStack.Screen
+              name="Login"
+              options={{ headerShown: false }}
+              component={LoginScreen}
+            />
+            <MainStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <MainStack.Screen
+              name="CreatePostsScreen"
+              component={CreatePostsScreen}
+            />
+            {/* <MainStack.Screen name="PostScreen" component={PostScreen} /> */}
+            {/* <MainStack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
+            <MainStack.Screen name="MapScreen" component={MapScreen} options={{
+              title: "Мапа",
+              headerTitleAlign: "center",
+              headerShown: true,
+              headerLeft: () => <GoBackButton />,
+            }} />
+            <MainStack.Screen name="CommentsScreen" component={CommentsScreen} options={{
+              title: "Коментарі",
+              headerTitleAlign: "center",
+              headerShown: true,
+              headerLeft: () => <GoBackButton />,
+              headerStyle: {
+                borderBottomWidth: 1,
+              },
+            }} />
+          </MainStack.Navigator>
+          <StatusBar />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }
