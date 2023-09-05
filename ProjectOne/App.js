@@ -1,5 +1,4 @@
 import { useFonts } from "expo-font";
-import { Ionicons } from "@expo/vector-icons";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -11,12 +10,12 @@ import Home from "./Screens/Home";
 import CommentsScreen from "./Screens/CommentsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import MapScreen from "./Screens/MapScreen";
-import PostScreen from "./Screens/PostScreen";
-import ProfileScreen from "./Screens/ProfileScreen";
+//import PostScreen from "./Screens/PostScreen";
+//import ProfileScreen from "./Screens/ProfileScreen";
 import { StatusBar, TouchableOpacity, View } from "react-native";
 import GoBackButton from "./components/GoBackButton";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 //////////////////////////////////////////////
 
@@ -33,7 +32,7 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <PersistGate persistor={store.persistor}>
+      <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
           <MainStack.Navigator initialRouteName="RegisterScreen">
             <MainStack.Screen
