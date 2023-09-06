@@ -84,16 +84,16 @@ const CreatePostsScreen = () => {
     setPhotoLocation(`${address[0].city}, ${address[0].country}`);
   };
 
-  const deletePost = () => {
+  const clearPost = () => {
     setPhoto("");
     setTitle("");
     setPhotoLocation("");
   };
 
-  const PostPhoto = () => {
-    console.log(`Coordinates${newLat}, ${newLong}`);
+  const publishPost = () => {
+    //console.log(`Coordinates${newLat}, ${newLong}`);
     navigation.navigate("Публікації");
-    deletePost();
+    clearPost();
     console.log(`Photo:${photo}, Title:${title}, Location:${photoLocation}`);
   };
 
@@ -172,7 +172,7 @@ const CreatePostsScreen = () => {
                 backgroundColor:
                   photo && title && photoLocation ? "#FF6C00" : "#F6F6F6",
               }}
-              onPress={PostPhoto}
+              onPress={publishPost}
             >
               <Text
                 style={{
@@ -187,7 +187,7 @@ const CreatePostsScreen = () => {
           </View>
           <View style={styles.bottomContainer}>
             <TouchableOpacity
-              onPress={deletePost}
+              onPress={clearPost}
               disabled={photo || title || photoLocation ? false : true}
             >
               <Feather name="trash-2" size={24} color={"#BDBDBD"} />
