@@ -26,9 +26,10 @@ const RegistrationScreen = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
-  const [isLoginFocused, setIsLoginFocused] = useState(false);
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  // const [isLoginFocused, setIsLoginFocused] = useState(false);
+  // const [isEmailFocused, setIsEmailFocused] = useState(false);
+  // const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
 
   const onChangeLogin = (text) => {
@@ -41,6 +42,18 @@ const RegistrationScreen = () => {
 
   const onChangePassword = (text) => {
     setState((prevState) => ({ ...prevState, password: text.trim() }));
+  };
+
+  const togglePassword = () => {
+    setHidePassword(!hidePassword);
+  };
+
+  const handleFocus = (key) => {
+    setIsFocused(key);
+  };
+
+  const handleBlur = () => {
+    setIsFocused("");
   };
 
   const onRegisterClick = () => {
@@ -84,52 +97,56 @@ const RegistrationScreen = () => {
               </View>
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
-                style={[styles.input, isLoginFocused && styles.inputFocus]}
-                onFocus={() => {
-                  setIsShowKeybord(true), setIsLoginFocused(true);
-                  setIsEmailFocused(false);
-                  setIsPasswordFocused(false);
-                }}
-                onBlur={() => setIsLoginFocused(false)}
+                style={[
+                  styles.input,
+                  {
+                    borderColor:
+                      isFocused === "nickname" ? "#FF6C00" : "#E8E8E8",
+                  },
+                ]}
                 placeholder="Логін"
                 value={state.nickname}
+                textContentType="nickname"
                 onChangeText={onChangeLogin}
+                onFocus={() => handleFocus("nickname")}
+                onBlur={handleBlur}
               />
               <TextInput
-                style={[styles.input, isEmailFocused && styles.inputFocus]}
-                onFocus={() => {
-                  setIsShowKeybord(true), setIsEmailFocused(true);
-                  setIsLoginFocused(false);
-                  setIsPasswordFocused(false);
-                }}
-                onBlur={() => setIsEmailFocused(false)}
+                style={[
+                  styles.input,
+                  {
+                    borderColor:
+                      isFocused === "emailAddress" ? "#FF6C00" : "#E8E8E8",
+                  },
+                ]}
                 placeholder="Адреса електронної пошти"
                 value={state.email}
                 onChangeText={onChangeEmail}
+                textContentType="emailAddress"
                 autoComplete="email"
                 keyboardType="email-address"
+                onFocus={() => handleFocus("emailAddress")}
+                onBlur={handleBlur}
               />
               <TextInput
-                style={[styles.input, isPasswordFocused && styles.inputFocus]}
-                onFocus={() => {
-                  setIsShowKeybord(true), setIsPasswordFocused(true);
-                  setIsLoginFocused(false);
-                  setIsEmailFocused(false);
-                }}
-                onBlur={() => setIsPasswordFocused(false)}
+                style={[
+                  styles.input,
+                  {
+                    borderColor:
+                      isFocused === "password" ? "#FF6C00" : "#E8E8E8",
+                  },
+                ]}
                 placeholder="Пароль"
                 value={state.password}
                 onChangeText={onChangePassword}
                 autoComplete="password"
+                textContentType="password"
                 secureTextEntry={hidePassword}
+                onFocus={() => handleFocus("password")}
+                onBlur={handleBlur}
               />
               <TouchableOpacity style={styles.showPassword}>
-                <Text
-                  style={styles.showPasswordText}
-                  onPress={() => {
-                    setHidePassword(!hidePassword);
-                  }}
-                >
+                <Text style={styles.showPasswordText} onPress={togglePassword}>
                   {hidePassword ? "Показати" : "Приховати"}
                 </Text>
               </TouchableOpacity>
@@ -193,15 +210,15 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 8,
     borderWidth: 1,
-    borderColor: "#E8E8E8",
+    //borderColor: "#E8E8E8",
     borderRadius: 8,
     padding: 10,
     backgroundColor: "#F6F6F6",
   },
-  inputFocus: {
-    borderColor: "#FF6C00",
-    borderWidth: 1,
-  },
+  // inputFocus: {
+  //   borderColor: "#FF6C00",
+  //   borderWidth: 1,
+  // },
   showPassword: {
     top: -40,
     left: 130,
