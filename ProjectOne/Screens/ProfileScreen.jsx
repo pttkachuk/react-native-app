@@ -1,8 +1,9 @@
 import React from "react";
 import background from "../images/registration-bg.jpg";
-import Avatar from "../images/profile-img.jpg";
+import Avatar from "../images/defaultAvatar.jpg";
 import { Feather } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
+//import { Octicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import {
   Image,
   ImageBackground,
@@ -33,7 +34,7 @@ const ProfileScreen = () => {
         <View style={styles.photoContainer}>
           <Image style={styles.avatar} source={Avatar} />
           <TouchableOpacity style={styles.deletePhotoButton}>
-            <Octicons name="plus-circle" size={23} color="#FF6C00" />
+            <AntDesign name="closecircleo" size={23} color="#BDBDBD" />
           </TouchableOpacity>
         </View>
         <Text style={styles.text}>Name Surname</Text>
