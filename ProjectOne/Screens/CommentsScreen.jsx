@@ -41,7 +41,11 @@ const CommentsScreen = () => {
             },
           ]}
         >
-          <Image source={"#"} resizeMode={"cover"} style={styles.image} />
+          <Image
+            source={typeof way === "number" ? way : { uri: way }}
+            resizeMode={"cover"}
+            style={styles.image}
+          />
           <FlatList
             data={comments}
             keyExtractor={(item) => item.id}
