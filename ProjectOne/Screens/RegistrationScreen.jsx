@@ -61,7 +61,7 @@ const RegistrationScreen = () => {
     console.log(
       `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
     );
-    navigation.navigate("Home", { screen: "PostsScreen" });
+    navigation.navigate("Home");
     setState(initialState);
   };
 
