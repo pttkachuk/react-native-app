@@ -1,19 +1,24 @@
 import { Image, View, Text, StyleSheet } from "react-native";
-import moment from "moment";
-import "moment/locale/uk";
 import React from "react";
 import Test from "../images/forest.jpg";
 
-const CommentComponent = () => {
-  const date = new Date().getTime();
+const CommentComponent = ({ img, text, date }) => {
+  const visualDate = (date) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(date).toLocaleString("uk-UA", options);
+  };
   return (
     <View style={styles.container}>
       <Image source={Test} />
       <View style={styles.comContainerontainer}>
-        <Text style={styles.text}>Коментар...</Text>
-        <Text style={styles.date}>
-          {moment(date).locale("uk").format("DD MMMM, YYYY | HH:mm")}
-        </Text>
+        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.date}>{visualDate(date)}</Text>
       </View>
     </View>
   );
