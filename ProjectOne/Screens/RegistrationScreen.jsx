@@ -27,9 +27,6 @@ const RegistrationScreen = () => {
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  // const [isLoginFocused, setIsLoginFocused] = useState(false);
-  // const [isEmailFocused, setIsEmailFocused] = useState(false);
-  // const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
 
   const onChangeLogin = (text) => {
@@ -210,15 +207,10 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 8,
     borderWidth: 1,
-    //borderColor: "#E8E8E8",
     borderRadius: 8,
     padding: 10,
     backgroundColor: "#F6F6F6",
   },
-  // inputFocus: {
-  //   borderColor: "#FF6C00",
-  //   borderWidth: 1,
-  // },
   showPassword: {
     top: -40,
     left: 130,
