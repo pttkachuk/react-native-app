@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -14,6 +14,11 @@ import {
 } from "react-native";
 import background from "../images/registration-bg.jpg";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../redux/auth/authSelectors";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/config";
+import { logIn } from "../redux/auth/authSlice";
 const initialState = {
   email: "",
   password: "",
@@ -21,6 +26,8 @@ const initialState = {
 
 const LoginScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -45,15 +52,39 @@ const LoginScreen = () => {
     setIsFocused("");
   };
 
-  const onLoginClick = () => {
-    if (!state.email || !state.password) {
-      Alert.alert("Заповніть всі поля!");
-      return;
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate("Home");
     }
-    console.log(`Email:${state.email}, Password:${state.password}`);
-    navigation.navigate("Home", { screen: "PostsScreen" });
-    setState(initialState);
+  }, [isLoggedIn, navigation]);
+
+  const handleLogIn = async () => {
+    try {
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        state.email,
+        state.password
+      );
+      dispatch(logIn(state.email, state.password));
+      navigation.navigate("Home");
+      setState(initialState);
+      console.log(credentials.user);
+      return credentials.user;
+    } catch (error) {
+      alert(error.message);
+    }
   };
+
+  // const onLoginClick = () => {
+  //   if (!state.email || !state.password) {
+  //     Alert.alert("Заповніть всі поля!");
+  //     return;
+  //   }
+  //   console.log(`Email:${state.email}, Password:${state.password}`);
+  //   navigation.navigate("Home", { screen: "PostsScreen" });
+  //   setState(initialState);
+  // };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -116,7 +147,7 @@ const LoginScreen = () => {
               <TouchableOpacity
                 style={styles.button}
                 activeOpacity={0.5}
-                onPress={onLoginClick}
+                onPress={handleLogIn}
               >
                 <Text style={styles.titlebutton}>Увійти</Text>
               </TouchableOpacity>
