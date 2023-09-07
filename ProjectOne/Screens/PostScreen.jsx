@@ -1,21 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Avatar from "../images/defaultAvatar.jpg";
 import PublicationsPost from "../components/PublicationsPost";
-import { auth } from "../firebase/config";
-import { useSelector } from "react-redux";
+import { auth, db } from "../firebase/config";
+import { useDispatch, useSelector } from "react-redux";
 import { selectPosts } from "../redux/post/postsSelecotrs";
+import { useIsFocused } from "@react-navigation/native";
+import { collection, getDocs } from "firebase/firestore";
+import { addPost } from "../redux/post/postsSlice";
 
 const PostScreen = () => {
   const [user, setUser] = useState(null);
-  // const posts = useSelector(selectPosts);
-  // console.log(posts);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const posts = useSelector(selectPosts);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
     });
     return unsubscribe;
   });
+
+  useEffect(() => {
+    if (isFocused) {
+      (async () => {
+        try {
+          const snapshot = await getDocs(collection(db, "posts"));
+
+          const postsData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }));
+          dispatch(addPost(postsData));
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      })();
+    }
+  }, [isFocused]);
+
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
@@ -25,7 +56,22 @@ const PostScreen = () => {
           <Text style={styles.userEmail}>{user?.email}</Text>
         </View>
       </View>
-      <PublicationsPost />
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => {
+          item.id;
+        }}
+        renderItem={({ item }) => (
+          <PublicationsPost
+            id={item.id}
+            way={item.data.photo}
+            name={item.data.title}
+            //commentsNumber={item.data.comments.length}
+            country={item.data.photoLocation}
+            coords={item.data.geoLocation}
+          />
+        )}
+      />
     </View>
   );
 };
