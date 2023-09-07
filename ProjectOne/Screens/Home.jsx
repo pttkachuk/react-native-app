@@ -51,18 +51,6 @@ const Home = () => {
     </TouchableOpacity>
   );
 
-  // const goBack = () => {
-  //   return (
-  //     <View style={{ marginLeft: 16 }}>
-  //       <TouchableOpacity
-  //         activeOpacity={0.5}
-  //         onPress={() => navigation.navigate("Публікації")}
-  //       >
-  //         <Ionicons name="arrow-back-sharp" size={24} color="#212121" />
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // };
   return (
     <Tabs.Navigator
       screenOptions={{

@@ -72,18 +72,6 @@ const RegistrationScreen = () => {
     }
   };
 
-  // const onRegisterClick = () => {
-  //   if (!state.nickname || !state.email || !state.password) {
-  //     Alert.alert("Заповніть всі поля!");
-  //     return;
-  //   }
-  //   console.log(
-  //     `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
-  //   );
-  //   navigation.navigate("Home");
-  //   setState(initialState);
-  // };
-
   const onRegistrationClick = () => {
     console.log(
       `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`

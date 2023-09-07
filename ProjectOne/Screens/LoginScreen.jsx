@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
@@ -74,16 +73,6 @@ const LoginScreen = () => {
       alert(error.message);
     }
   };
-
-  // const onLoginClick = () => {
-  //   if (!state.email || !state.password) {
-  //     Alert.alert("Заповніть всі поля!");
-  //     return;
-  //   }
-  //   console.log(`Email:${state.email}, Password:${state.password}`);
-  //   navigation.navigate("Home", { screen: "PostsScreen" });
-  //   setState(initialState);
-  // };
 
   return (
     <TouchableWithoutFeedback
