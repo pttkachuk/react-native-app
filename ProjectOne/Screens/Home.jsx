@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { auth } from "../firebase/config";
 
 //////////////////////////////////////////////
 import PostScreen from "./PostScreen";
@@ -10,12 +11,27 @@ import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GoBackButton from "../components/GoBackButton";
+import { useDispatch } from "react-redux";
+import { logOut } from "../redux/auth/authSlice";
 //////////////////////////////////////////////
 
 const Tabs = createBottomTabNavigator();
 
 const Home = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleLogOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(logOut());
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   const PostBottomIcon = () => {
     return <Ionicons name="grid-outline" size={24} color="#808080" />;
@@ -29,7 +45,7 @@ const Home = () => {
     <TouchableOpacity
       style={{ paddingRight: 20 }}
       activeOpacity={0.5}
-      onPress={() => navigation.navigate("Login")}
+      onPress={handleLogOut}
     >
       <Feather name="log-out" size={24} color="#BDBDBD" />
     </TouchableOpacity>
