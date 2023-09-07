@@ -5,21 +5,32 @@ import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Test from "../images/forest.jpg";
 
-const PublicationsPost = () => {
+const PublicationsPost = ({
+  id,
+  way,
+  name,
+  //commentsNumber,
+  country,
+  coords,
+}) => {
   const navigation = useNavigation();
   const handleCommentsRedirect = (way) => {
-    navigation.navigate("CommentsScreen");
+    navigation.navigate("CommentsScreen", { way: way, id: id });
   };
 
   const handleMapRedirect = () => {
-    navigation.navigate("MapScreen");
+    navigation.navigate("MapScreen", { coords: coords });
   };
   return (
     <View style={{ marginBottom: 32 }}>
       <View style={{ marginBottom: 8 }}>
-        <Image source={Test} resizeMode={"cover"} style={styles.image} />
+        <Image
+          source={typeof way === "number" ? way : { uri: way }}
+          resizeMode={"cover"}
+          style={styles.image}
+        />
       </View>
-      <Text style={styles.name}>forest</Text>
+      <Text style={styles.name}>{name}</Text>
       <View style={styles.aboutContainer}>
         <View style={styles.aboutLeftContainer}>
           <TouchableOpacity onPress={handleCommentsRedirect}>
@@ -32,7 +43,7 @@ const PublicationsPost = () => {
             <Feather name="map-pin" size={24} color="#BDBDBD" />
           </TouchableOpacity>
           <Text style={[styles.text, { textDecorationLine: "underline" }]}>
-            Chernivtsi
+            {country}
           </Text>
         </View>
       </View>
