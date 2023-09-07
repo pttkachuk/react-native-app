@@ -1,4 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { auth } from "../firebase/config";
+import { createUser } from "../redux/auth/authSlice";
+import {
+  updateProfile,
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
 import {
   Alert,
   ImageBackground,
@@ -24,6 +32,7 @@ const initialState = {
 
 const RegistrationScreen = () => {
   const navigation = useNavigation();
+  const dispach = useDispatch();
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -53,16 +62,54 @@ const RegistrationScreen = () => {
     setIsFocused("");
   };
 
-  const onRegisterClick = () => {
-    if (!state.nickname || !state.email || !state.password) {
-      Alert.alert("Заповніть всі поля!");
-      return;
+  const updateUserProfile = async (user) => {
+    if (user) {
+      try {
+        await updateProfile(user, { displayName: state.nickname });
+      } catch (error) {
+        throw error;
+      }
     }
+  };
+
+  // const onRegisterClick = () => {
+  //   if (!state.nickname || !state.email || !state.password) {
+  //     Alert.alert("Заповніть всі поля!");
+  //     return;
+  //   }
+  //   console.log(
+  //     `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
+  //   );
+  //   navigation.navigate("Home");
+  //   setState(initialState);
+  // };
+
+  const onRegistrationClick = () => {
     console.log(
       `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
     );
-    navigation.navigate("Home");
-    setState(initialState);
+    fetchSignInMethodsForEmail(auth, state.email)
+      .then((signInMetods) => {
+        if (signInMetods.length > 0) {
+          alert("Something went wrong, maybe such a user already exists");
+        } else {
+          createUserWithEmailAndPassword(auth, state.email, state.password)
+            .then((userInfo) => {
+              const user = userInfo.user;
+              console.log(user);
+              updateUserProfile(user);
+              dispach(createUser(state.email, state.password));
+              navigation.navigate("Home");
+              setState(initialState);
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   return (
@@ -150,7 +197,7 @@ const RegistrationScreen = () => {
               <TouchableOpacity
                 style={styles.button}
                 activeOpacity={0.5}
-                onPress={onRegisterClick}
+                onPress={onRegistrationClick}
               >
                 <Text style={styles.titlebutton}>Зареєструватися</Text>
               </TouchableOpacity>
