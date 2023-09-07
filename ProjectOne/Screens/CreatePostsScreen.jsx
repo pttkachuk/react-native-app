@@ -27,10 +27,10 @@ const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState("");
   const [title, setTitle] = useState("");
   const [photoLocation, setPhotoLocation] = useState("");
+  const [geoLocation, setGeoLocation] = useState("");
   // const [newLat, setNewLat] = useState(null);
   // const [newLong, setNewLong] = useState(null);
 
-  //const [geoLocation, setGeoLocation] = useState("");
   //const [croods, setCroods] = useState(null);
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -50,12 +50,12 @@ const CreatePostsScreen = () => {
         console.log("Permission to access location was denied");
       }
 
-      // let location = await Location.getCurrentPositionAsync({});
-      // const coords = {
-      //   latitude: location.coords.latitude,
-      //   longitude: location.coords.longitude,
-      // };
-      // setGeoLocation(coords);
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setGeoLocation(coords);
     })();
   }, []);
 
@@ -72,12 +72,12 @@ const CreatePostsScreen = () => {
       await MediaLibrary.createAssetAsync(uri);
       setPhoto(uri);
     }
-    let location = await Location.getCurrentPositionAsync({});
-    const address = await Location.reverseGeocodeAsync({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-    setPhotoLocation(`${address[0].city}, ${address[0].country}`);
+    // let location = await Location.getCurrentPositionAsync({});
+    // const address = await Location.reverseGeocodeAsync({
+    //   latitude: location.coords.latitude,
+    //   longitude: location.coords.longitude,
+    // });
+    // setPhotoLocation(`${address[0].city}, ${address[0].country}`);
   };
 
   const clearPost = () => {
@@ -99,6 +99,7 @@ const CreatePostsScreen = () => {
       const docRef = await addDoc(collection(db, "posts"), {
         title,
         photo,
+        geoLocation,
         photoLocation,
         likes: 0,
         comments: [],
@@ -172,7 +173,7 @@ const CreatePostsScreen = () => {
                   style={[styles.input, styles.locationInput]}
                   placeholder="Місцевість..."
                   value={photoLocation}
-                  //onChangeText={(value) => setPhotoLocation(value)}
+                  onChangeText={(value) => setPhotoLocation(value)}
                   onFocus={() => setIsKeyboardVisible(true)}
                   onBlur={() => setIsKeyboardVisible(false)}
                 />
