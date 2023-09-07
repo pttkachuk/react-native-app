@@ -11,10 +11,10 @@ const PostScreen = () => {
   // const posts = useSelector(selectPosts);
   // console.log(posts);
   useEffect(() => {
-    const subscribedUser = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
     });
-    return subscribedUser;
+    return unsubscribe;
   });
   return (
     <View style={styles.container}>
