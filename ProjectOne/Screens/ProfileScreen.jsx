@@ -14,9 +14,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfilePost from "../components/ProfilePost";
+import { auth } from "../firebase/config";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const userName = auth.currentUser?.displayName;
   return (
     <ImageBackground
       resizeMode="cover"
@@ -37,7 +39,7 @@ const ProfileScreen = () => {
             <AntDesign name="closecircleo" size={23} color="#BDBDBD" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.text}>Name Surname</Text>
+        <Text style={styles.text}>{userName}</Text>
         <ProfilePost />
       </View>
     </ImageBackground>
