@@ -17,6 +17,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
@@ -75,12 +77,6 @@ const CreatePostsScreen = () => {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
-    // const latItude = location.coords.latitude;
-    // const longItude = location.coords.longitude;
-    // setNewLat(latItude);
-    // setNewLong(longItude);
-
-    // console.log("First test", `Lat:${newLat}, Long:${newLong}`);
     setPhotoLocation(`${address[0].city}, ${address[0].country}`);
   };
 
@@ -91,10 +87,28 @@ const CreatePostsScreen = () => {
   };
 
   const publishPost = () => {
-    //console.log(`Coordinates${newLat}, ${newLong}`);
+    writeDataToFirestore();
     navigation.navigate("Публікації");
     clearPost();
     console.log(`Photo:${photo}, Title:${title}, Location:${photoLocation}`);
+  };
+
+  const writeDataToFirestore = async () => {
+    const currentDate = Date.now();
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        title,
+        photo,
+        photoLocation,
+        likes: 0,
+        comments: [],
+        date: currentDate,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      throw error;
+    }
   };
 
   return (
