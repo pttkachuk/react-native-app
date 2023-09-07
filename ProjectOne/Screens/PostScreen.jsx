@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
-import Avatar from "../images/profile-img.jpg";
+import Avatar from "../images/defaultAvatar.jpg";
 import PublicationsPost from "../components/PublicationsPost";
+import { auth } from "../firebase/config";
+import { useSelector } from "react-redux";
+import { selectPosts } from "../redux/post/postsSelecotrs";
 
 const PostScreen = () => {
+  const [user, setUser] = useState(null);
+  // const posts = useSelector(selectPosts);
+  // console.log(posts);
+  useEffect(() => {
+    const subscribedUser = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+    return subscribedUser;
+  });
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
         <Image source={Avatar} alt="User photo" style={styles.avatar} />
         <View style={styles.userData}>
-          <Text style={styles.userName}>Name Surname</Text>
-          <Text style={styles.userEmail}>example@mail.com</Text>
+          <Text style={styles.userName}>{user?.displayName}</Text>
+          <Text style={styles.userEmail}>{user?.email}</Text>
         </View>
       </View>
       <PublicationsPost />
