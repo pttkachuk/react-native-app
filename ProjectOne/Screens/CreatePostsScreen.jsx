@@ -19,19 +19,15 @@ import {
 } from "react-native";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase/config";
+import { useSelector } from "react-redux";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-
   const [photo, setPhoto] = useState("");
   const [title, setTitle] = useState("");
   const [photoLocation, setPhotoLocation] = useState("");
   const [geoLocation, setGeoLocation] = useState("");
-  // const [newLat, setNewLat] = useState(null);
-  // const [newLong, setNewLong] = useState(null);
-
-  //const [croods, setCroods] = useState(null);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
