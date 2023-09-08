@@ -19,7 +19,6 @@ import {
 } from "react-native";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { useSelector } from "react-redux";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
@@ -68,12 +67,6 @@ const CreatePostsScreen = () => {
       await MediaLibrary.createAssetAsync(uri);
       setPhoto(uri);
     }
-    // let location = await Location.getCurrentPositionAsync({});
-    // const address = await Location.reverseGeocodeAsync({
-    //   latitude: location.coords.latitude,
-    //   longitude: location.coords.longitude,
-    // });
-    // setPhotoLocation(`${address[0].city}, ${address[0].country}`);
   };
 
   const clearPost = () => {
