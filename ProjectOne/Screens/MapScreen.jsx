@@ -4,10 +4,6 @@ import { useRoute } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
 
 const MapScreen = () => {
-  // const {
-  //   params: { newLat, newLong },
-  // } = useRoute();
-
   const route = useRoute();
   const coords = route.params?.coords;
   return (
@@ -15,15 +11,12 @@ const MapScreen = () => {
       <MapView
         style={styles.mapStyle}
         region={{
-          // latitude: newLat,
-          // longitude: newLong,
           ...coords,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
         mapType="standard"
         minZoomLevel={20}
-        //showsUserLocation={true}
       >
         {coords && <Marker title="You are here" coordinate={coords} />}
       </MapView>
