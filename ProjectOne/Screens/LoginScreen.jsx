@@ -106,6 +106,7 @@ const LoginScreen = () => {
                 value={state.email}
                 placeholder="Адреса електронної пошти"
                 autoComplete="email"
+                autoCapitalize="none"
                 textContentType="emailAddress"
                 keyboardType="email-address"
                 onFocus={() => handleFocus("emailAddress")}
