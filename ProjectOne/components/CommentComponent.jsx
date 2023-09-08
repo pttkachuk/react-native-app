@@ -1,6 +1,6 @@
 import { Image, View, Text, StyleSheet } from "react-native";
 import React from "react";
-import Test from "../images/forest.jpg";
+//import Test from "../images/forest.jpg";
 
 const CommentComponent = ({ img, text, date }) => {
   const visualDate = (date) => {
@@ -15,7 +15,7 @@ const CommentComponent = ({ img, text, date }) => {
   };
   return (
     <View style={styles.container}>
-      <Image source={Test} />
+      <Image source={img} />
       <View style={styles.comContainerontainer}>
         <Text style={styles.text}>{text}</Text>
         <Text style={styles.date}>{visualDate(date)}</Text>
