@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import Avatar from "../images/defaultAvatar.jpg";
+//import Avatar from "../images/defaultAvatar.jpg";
 import PublicationsPost from "../components/PublicationsPost";
 import { auth, db } from "../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
@@ -74,7 +74,7 @@ const PostScreen = () => {
             id={item.id}
             way={item.data.photo}
             name={item.data.title}
-            //commentsNumber={item.data.comments.length}
+            commentsNumber={item.data.comments.length}
             country={item.data.photoLocation}
             coords={item.data.geoLocation}
           />
