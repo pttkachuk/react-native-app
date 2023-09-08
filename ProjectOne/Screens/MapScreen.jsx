@@ -16,7 +16,7 @@ const MapScreen = () => {
           longitudeDelta: 0.0421,
         }}
         mapType="standard"
-        minZoomLevel={20}
+        showsUserLocation={true}
       >
         {coords && <Marker title="You are here" coordinate={coords} />}
       </MapView>
