@@ -9,7 +9,7 @@ const PublicationsPost = ({
   id,
   way,
   name,
-  //commentsNumber,
+  commentsNumber,
   country,
   coords,
 }) => {
@@ -36,7 +36,7 @@ const PublicationsPost = ({
           <TouchableOpacity onPress={handleCommentsRedirect}>
             <Ionicons name="chatbubble-outline" size={24} color="#FF6C00" />
           </TouchableOpacity>
-          <Text style={styles.text}>4</Text>
+          <Text style={styles.text}>{commentsNumber}</Text>
         </View>
         <View style={styles.aboutRightContainer}>
           <TouchableOpacity onPress={handleMapRedirect}>
