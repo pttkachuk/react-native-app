@@ -58,6 +58,9 @@ const LoginScreen = () => {
   }, [isLoggedIn, navigation]);
 
   const handleLogIn = async () => {
+    if (!state.email || !state.password) {
+      return Alert.alert("Заповніть всі поля");
+    }
     try {
       const credentials = await signInWithEmailAndPassword(
         auth,
