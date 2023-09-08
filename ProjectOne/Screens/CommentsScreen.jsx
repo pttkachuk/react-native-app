@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -12,10 +12,13 @@ import {
   FlatList,
   Text,
 } from "react-native";
+import uuid from "react-native-uuid";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import CommentComponent from "../components/CommentComponent";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const CommentsScreen = () => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -26,6 +29,43 @@ const CommentsScreen = () => {
   const way = route.params?.way;
   const id = route.params?.id;
   const currentDate = new Date().getTime();
+
+  useEffect(() => {
+    async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "posts"));
+        const postsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        const comments = postsData.find((post) => {
+          post.id === id;
+        }).data.comments;
+        setComments(comments);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    };
+  }, [inputValue]);
+
+  const updateDataInFirestore = async (collectionName, docId) => {
+    try {
+      const ref = doc(db, collectionName, docId);
+      await updateDoc(ref, {
+        comments: [
+          ...comments,
+          { comment: inputValue, currentDate, id: uuid.v4() },
+        ],
+      });
+      console.log("document updated");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setInputValue("");
+      Keyboard.dismiss();
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -42,7 +82,7 @@ const CommentsScreen = () => {
           ]}
         >
           <Image
-            source={typeof way === "number" ? way : { uri: way }}
+            source={typeof way === `number` ? way : { uri: way }}
             resizeMode={"cover"}
             style={styles.image}
           />
@@ -66,7 +106,10 @@ const CommentsScreen = () => {
               style={styles.input}
               placeholder="Коментувати..."
             />
-            <TouchableOpacity style={styles.sendMessageButton}>
+            <TouchableOpacity
+              style={styles.sendMessageButton}
+              onPress={() => updateDataInFirestore("posts", id)}
+            >
               <Feather name="arrow-up" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
