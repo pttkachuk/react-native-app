@@ -15,12 +15,14 @@ import { selectPosts } from "../redux/post/postsSelecotrs";
 import { useIsFocused } from "@react-navigation/native";
 import { collection, getDocs } from "firebase/firestore";
 import { addPost } from "../redux/post/postsSlice";
+import { selectAvatar } from "../redux/auth/authSelectors";
 
 const PostScreen = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const posts = useSelector(selectPosts);
+  const avatar = useSelector(selectAvatar);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -33,7 +35,6 @@ const PostScreen = () => {
       (async () => {
         try {
           const snapshot = await getDocs(collection(db, "posts"));
-
           const postsData = snapshot.docs.map((doc) => ({
             id: doc.id,
             data: doc.data(),
@@ -50,7 +51,14 @@ const PostScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
-        <Image source={Avatar} alt="User photo" style={styles.avatar} />
+        <View style={styles.imgWrapper}>
+          <Image
+            source={{ uri: avatar }}
+            alt="User photo"
+            style={styles.userImg}
+          />
+        </View>
+
         <View style={styles.userData}>
           <Text style={styles.userName}>{user?.displayName}</Text>
           <Text style={styles.userEmail}>{user?.email}</Text>
@@ -95,12 +103,23 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 32,
   },
-  avatar: {
+  imgWrapper: {
     width: 60,
     height: 60,
-    backgroundColor: "#F6F6F6",
     borderRadius: 16,
+    marginRight: 8,
+    backgroundColor: "#BDBDBD",
   },
+  userImg: {
+    width: "100%",
+    height: "100%",
+  },
+  // avatar: {
+  //   width: "100%",
+  //   height: "100%",
+  //   backgroundColor: "#F6F6F6",
+  //   borderRadius: 16,
+  // },
   userData: {
     flexDirection: "column",
     justifyContent: "center",
