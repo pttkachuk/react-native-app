@@ -28,17 +28,9 @@ import {
 } from "react-native";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-// const initialState = {
-//   nickname: "",
-//   email: "",
-//   password: "",
-//   avatar: null,
-// };
-
 const RegistrationScreen = () => {
   const navigation = useNavigation();
   const dispach = useDispatch();
-  //const [state, setState] = useState(initialState);
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,18 +38,6 @@ const RegistrationScreen = () => {
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
-
-  // const onChangeLogin = (text) => {
-  //   setState((prevState) => ({ ...prevState, nickname: text.trim() }));
-  // };
-
-  // const onChangeEmail = (text) => {
-  //   setState((prevState) => ({ ...prevState, email: text.trim() }));
-  // };
-
-  // const onChangePassword = (text) => {
-  //   setState((prevState) => ({ ...prevState, password: text.trim() }));
-  // };
 
   const togglePassword = () => {
     setHidePassword(!hidePassword);
@@ -74,7 +54,7 @@ const RegistrationScreen = () => {
   const updateUserProfile = async (user) => {
     if (user) {
       try {
-        await updateProfile(user, { displayName: login });
+        await updateProfile(user, { displayName: login, photoURL: avatar });
       } catch (error) {
         throw error;
       }
@@ -85,14 +65,17 @@ const RegistrationScreen = () => {
     setLogin("");
     setEmail("");
     setPassword("");
-    setAvatar(null);
   };
 
   const pickImage = async () => {
+    if (avatar) {
+      setAvatar(null);
+      return;
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
     if (!result.canceled) {
@@ -100,23 +83,28 @@ const RegistrationScreen = () => {
     }
   };
 
-  const saveAvatar = async () => {
-    try {
-      const responce = await fetch(avatar);
-      const file = await responce.blob();
-      await uploadBytes(ref(storage, `avatars/${file._data.blobId}`), file);
-      const imgUrl = await getDownloadURL(
-        ref(storage, `avatars/${file._data.blobId}`)
-      );
-      return imgUrl;
-    } catch (error) {
-      console.log(error);
+  const saveAvatar = async (imageUri, prefixFolder) => {
+    const uniquePostId = Date.now().toString();
+
+    if (imageUri) {
+      try {
+        const response = await fetch(imageUri);
+        const file = await response.blob();
+        const storageRef = ref(storage, `${prefixFolder}/${uniquePostId}`);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(imageRef);
+        return downloadURL;
+      } catch (error) {
+        console.warn("uploadImageToServer: ", error);
+      }
     }
   };
 
   const onRegistrationClick = async () => {
     console.log(`Nickname:${login}, Email:${email}, Password:${password}`);
-    const avatar = await saveAvatar();
+    if (!email || !login || !password || !avatar) {
+      return Alert.alert("Заповніть всі поля");
+    }
     fetchSignInMethodsForEmail(auth, email)
       .then((signInMetods) => {
         if (signInMetods.length > 0) {
@@ -127,7 +115,14 @@ const RegistrationScreen = () => {
               const user = userInfo.user;
               console.log(user);
               updateUserProfile(user);
-              dispach(createUser(email, password, avatar, login));
+              dispach(
+                createUser({
+                  email: email,
+                  password: password,
+                  avatar: avatar,
+                  login: login,
+                })
+              );
               navigation.navigate("Home");
               resetForm();
             })
