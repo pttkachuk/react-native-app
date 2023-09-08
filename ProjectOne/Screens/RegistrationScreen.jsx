@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import background from "../images/registration-bg.jpg";
+import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
-import { auth } from "../firebase/config";
+import { useNavigation } from "@react-navigation/native";
+import { auth, storage } from "../firebase/config";
 import { createUser } from "../redux/auth/authSlice";
+import { Octicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import {
   updateProfile,
   createUserWithEmailAndPassword,
@@ -9,6 +14,7 @@ import {
 } from "firebase/auth";
 import {
   Alert,
+  Image,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
@@ -20,35 +26,38 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Octicons } from "@expo/vector-icons";
-import background from "../images/registration-bg.jpg";
-import { useNavigation } from "@react-navigation/native";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-const initialState = {
-  nickname: "",
-  email: "",
-  password: "",
-};
+// const initialState = {
+//   nickname: "",
+//   email: "",
+//   password: "",
+//   avatar: null,
+// };
 
 const RegistrationScreen = () => {
   const navigation = useNavigation();
   const dispach = useDispatch();
-  const [state, setState] = useState(initialState);
+  //const [state, setState] = useState(initialState);
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
 
-  const onChangeLogin = (text) => {
-    setState((prevState) => ({ ...prevState, nickname: text.trim() }));
-  };
+  // const onChangeLogin = (text) => {
+  //   setState((prevState) => ({ ...prevState, nickname: text.trim() }));
+  // };
 
-  const onChangeEmail = (text) => {
-    setState((prevState) => ({ ...prevState, email: text.trim() }));
-  };
+  // const onChangeEmail = (text) => {
+  //   setState((prevState) => ({ ...prevState, email: text.trim() }));
+  // };
 
-  const onChangePassword = (text) => {
-    setState((prevState) => ({ ...prevState, password: text.trim() }));
-  };
+  // const onChangePassword = (text) => {
+  //   setState((prevState) => ({ ...prevState, password: text.trim() }));
+  // };
 
   const togglePassword = () => {
     setHidePassword(!hidePassword);
@@ -65,30 +74,62 @@ const RegistrationScreen = () => {
   const updateUserProfile = async (user) => {
     if (user) {
       try {
-        await updateProfile(user, { displayName: state.nickname });
+        await updateProfile(user, { displayName: login });
       } catch (error) {
         throw error;
       }
     }
   };
 
-  const onRegistrationClick = () => {
-    console.log(
-      `Nickname:${state.nickname}, Email:${state.email}, Password:${state.password}`
-    );
-    fetchSignInMethodsForEmail(auth, state.email)
+  const resetForm = () => {
+    setLogin("");
+    setEmail("");
+    setPassword("");
+    setAvatar(null);
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
+
+  const saveAvatar = async () => {
+    try {
+      const responce = await fetch(avatar);
+      const file = await responce.blob();
+      await uploadBytes(ref(storage, `avatars/${file._data.blobId}`), file);
+      const imgUrl = await getDownloadURL(
+        ref(storage, `avatars/${file._data.blobId}`)
+      );
+      return imgUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onRegistrationClick = async () => {
+    console.log(`Nickname:${login}, Email:${email}, Password:${password}`);
+    const avatar = await saveAvatar();
+    fetchSignInMethodsForEmail(auth, email)
       .then((signInMetods) => {
         if (signInMetods.length > 0) {
           alert("Something went wrong, maybe such a user already exists");
         } else {
-          createUserWithEmailAndPassword(auth, state.email, state.password)
+          createUserWithEmailAndPassword(auth, email, password)
             .then((userInfo) => {
               const user = userInfo.user;
               console.log(user);
               updateUserProfile(user);
-              dispach(createUser(state.email, state.password));
+              dispach(createUser(email, password, avatar, login));
               navigation.navigate("Home");
-              setState(initialState);
+              resetForm();
             })
             .catch((error) => {
               alert(error.message);
@@ -120,12 +161,24 @@ const RegistrationScreen = () => {
               }}
             >
               <View style={styles.avatar}>
-                <TouchableOpacity
-                  style={styles.addAvatar}
-                  onPress={() => Alert.alert("Simple Button pressed")}
-                >
-                  <Octicons name="plus-circle" size={23} color="#FF6C00" />
-                </TouchableOpacity>
+                <Image source={{ uri: avatar }} style={styles.avatarImg} />
+                {avatar ? (
+                  <TouchableOpacity
+                    style={styles.addAvatar}
+                    onPress={() => {
+                      setAvatar(null);
+                    }}
+                  >
+                    <AntDesign name="closecircleo" size={23} color="#BDBDBD" />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.addAvatar}
+                    onPress={pickImage}
+                  >
+                    <Octicons name="plus-circle" size={23} color="#FF6C00" />
+                  </TouchableOpacity>
+                )}
               </View>
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
@@ -137,9 +190,9 @@ const RegistrationScreen = () => {
                   },
                 ]}
                 placeholder="Логін"
-                value={state.nickname}
+                value={login}
                 textContentType="nickname"
-                onChangeText={onChangeLogin}
+                onChangeText={(text) => setLogin(text)}
                 onFocus={() => handleFocus("nickname")}
                 onBlur={handleBlur}
               />
@@ -152,9 +205,10 @@ const RegistrationScreen = () => {
                   },
                 ]}
                 placeholder="Адреса електронної пошти"
-                value={state.email}
-                onChangeText={onChangeEmail}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
                 textContentType="emailAddress"
+                autoCapitalize="none"
                 autoComplete="email"
                 keyboardType="email-address"
                 onFocus={() => handleFocus("emailAddress")}
@@ -169,8 +223,8 @@ const RegistrationScreen = () => {
                   },
                 ]}
                 placeholder="Пароль"
-                value={state.password}
-                onChangeText={onChangePassword}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
                 autoComplete="password"
                 textContentType="password"
                 secureTextEntry={hidePassword}
@@ -234,7 +288,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Medium",
     lineHeight: 35,
     letterSpacing: 0.3,
-    marginTop: 32,
+    marginTop: 92,
     marginBottom: 32,
   },
   input: {
@@ -276,20 +330,36 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   avatar: {
-    marginTop: -60,
-    height: 120,
+    position: "absolute",
+    top: -60,
     width: 120,
-    backgroundColor: "#F6F6F6",
+    height: 120,
     borderRadius: 16,
-    alignSelf: "center",
+    backgroundColor: "#F6F6F6",
+    // marginTop: -60,
+    // height: 120,
+    // width: 120,
+    // backgroundColor: "#F6F6F6",
+    // borderRadius: 16,
+    // alignSelf: "center",
+  },
+  avatarImg: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
   },
   addAvatar: {
-    marginTop: "65%",
-    left: "90%",
-    height: 25,
-    width: 25,
-    pointerEvents: "auto",
+    position: "absolute",
+    bottom: 14,
+    right: -13,
+    borderRadius: 50,
     backgroundColor: "#fff",
-    borderRadius: 100,
+    // marginTop: "65%",
+    // left: "90%",
+    // height: 25,
+    // width: 25,
+    // pointerEvents: "auto",
+    // backgroundColor: "#fff",
+    // borderRadius: 100,
   },
 });
