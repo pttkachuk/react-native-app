@@ -15,10 +15,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import ProfilePost from "../components/ProfilePost";
 import { auth } from "../firebase/config";
+import { useSelector } from "react-redux";
+import { selectAvatar } from "../redux/auth/authSelectors";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const userName = auth.currentUser?.displayName;
+  const avatar = useSelector(selectAvatar);
   return (
     <ImageBackground
       resizeMode="cover"
@@ -34,7 +37,7 @@ const ProfileScreen = () => {
           <Feather name="log-out" size={24} color="#BDBDBD" />
         </TouchableOpacity>
         <View style={styles.photoContainer}>
-          <Image style={styles.avatar} source={Avatar} />
+          <Image style={styles.avatar} source={{ uri: avatar }} />
           <TouchableOpacity style={styles.deletePhotoButton}>
             <AntDesign name="closecircleo" size={23} color="#BDBDBD" />
           </TouchableOpacity>
