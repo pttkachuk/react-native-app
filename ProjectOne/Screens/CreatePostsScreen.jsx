@@ -69,6 +69,14 @@ const CreatePostsScreen = () => {
     }
   };
 
+  function generateUniqueId() {
+    const timestamp = new Date().getTime();
+    const randomId = Math.floor(Math.random() * 1000000);
+    return `${timestamp}-${randomId}`;
+  }
+
+  const postId = generateUniqueId();
+
   const clearPost = () => {
     setPhoto("");
     setTitle("");
@@ -86,6 +94,7 @@ const CreatePostsScreen = () => {
     const currentDate = Date.now();
     try {
       const docRef = await addDoc(collection(db, "posts"), {
+        postId,
         title,
         photo,
         geoLocation,
