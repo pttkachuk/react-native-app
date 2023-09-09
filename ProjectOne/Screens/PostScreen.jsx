@@ -74,7 +74,7 @@ const PostScreen = () => {
             id={item.id}
             way={item.data.photo}
             name={item.data.title}
-            commentsNumber={item.data.comments.length}
+            //commentsNumber={item.data.comments.length}
             country={item.data.photoLocation}
             coords={item.data.geoLocation}
           />
