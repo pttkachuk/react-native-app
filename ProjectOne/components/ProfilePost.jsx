@@ -1,37 +1,54 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Test from "../images/forest.jpg";
 
-const ProfilePost = () => {
+const ProfilePost = ({
+  posdId,
+  id,
+  way,
+  name,
+  //commentsNumber,
+  country,
+  coords,
+}) => {
   const navigation = useNavigation();
-  const handleCommentsRedirect = (way) => {
+  const [likes, setLikes] = useState(0);
+  const incrementLikes = () => {
+    setLikes(likes + 1);
+  };
+  const handleCommentsRedirect = () => {
     navigation.navigate("CommentsScreen");
   };
 
   const handleMapRedirect = () => {
-    navigation.navigate("MapScreen");
+    navigation.navigate("MapScreen", { coords: coords });
   };
   return (
-    <View style={{ marginBottom: 32 }}>
+    <View style={{ marginBottom: 32 }} key={posdId}>
       <View style={{ marginBottom: 8 }}>
-        <Image source={Test} resizeMode={"cover"} style={styles.image} />
+        <Image
+          source={typeof way === "number" ? way : { uri: way }}
+          resizeMode={"cover"}
+          style={styles.image}
+        />
       </View>
-      <Text style={styles.name}>forest</Text>
+      <Text style={styles.name}>{name}</Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ flexDirection: "row", gap: 24 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <TouchableOpacity onPress={handleCommentsRedirect}>
               <Ionicons name="chatbubble-outline" size={24} color="#FF6C00" />
             </TouchableOpacity>
-
-            <Text style={styles.text}>4</Text>
+            <Text style={styles.text}>0</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <Feather name="thumbs-up" size={24} color="#FF6C00" />
-            <Text style={styles.text}>34</Text>
+            <TouchableOpacity onPress={incrementLikes}>
+              <Feather name="thumbs-up" size={24} color="#FF6C00" />
+            </TouchableOpacity>
+            <Text style={styles.text}>{likes}</Text>
           </View>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
@@ -46,7 +63,7 @@ const ProfilePost = () => {
               },
             ]}
           >
-            Chernivtsi
+            {country}
           </Text>
         </View>
       </View>
