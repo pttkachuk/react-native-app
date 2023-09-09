@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Test from "../images/forest.jpg";
 
 const PublicationsPost = ({
+  posdId,
   id,
   way,
   name,
@@ -14,15 +15,15 @@ const PublicationsPost = ({
   coords,
 }) => {
   const navigation = useNavigation();
-  const handleCommentsRedirect = (way) => {
-    navigation.navigate("CommentsScreen", { way: way, id: id });
+  const handleCommentsRedirect = () => {
+    navigation.navigate("CommentsScreen");
   };
 
   const handleMapRedirect = () => {
     navigation.navigate("MapScreen", { coords: coords });
   };
   return (
-    <View style={{ marginBottom: 32 }}>
+    <View style={{ marginBottom: 32 }} key={posdId}>
       <View style={{ marginBottom: 8 }}>
         <Image
           source={typeof way === "number" ? way : { uri: way }}
@@ -36,7 +37,7 @@ const PublicationsPost = ({
           <TouchableOpacity onPress={handleCommentsRedirect}>
             <Ionicons name="chatbubble-outline" size={24} color="#FF6C00" />
           </TouchableOpacity>
-          <Text style={styles.text}>2</Text>
+          <Text style={styles.text}>0</Text>
         </View>
         <View style={styles.aboutRightContainer}>
           <TouchableOpacity onPress={handleMapRedirect}>
