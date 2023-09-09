@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import background from "../images/registration-bg.jpg";
-import Avatar from "../images/defaultAvatar.jpg";
+//import Avatar from "../images/defaultAvatar.jpg";
 import { Feather } from "@expo/vector-icons";
 //import { Octicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import {
+  FlatList,
   Image,
   ImageBackground,
   StyleSheet,
@@ -15,13 +16,30 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import ProfilePost from "../components/ProfilePost";
 import { auth } from "../firebase/config";
-import { useSelector } from "react-redux";
+import { logOut } from "../redux/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAvatar } from "../redux/auth/authSelectors";
+import { selectPosts } from "../redux/post/postsSelecotrs";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const userName = auth.currentUser?.displayName;
   const avatar = useSelector(selectAvatar);
+  const posts = useSelector(selectPosts);
+  console.log(posts);
+  const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
+  const handleLogOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(logOut());
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
   return (
     <ImageBackground
       resizeMode="cover"
@@ -32,7 +50,7 @@ const ProfileScreen = () => {
         <TouchableOpacity
           style={{ position: "absolute", right: 16, top: 22 }}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate("Login")}
+          onPress={handleLogOut}
         >
           <Feather name="log-out" size={24} color="#BDBDBD" />
         </TouchableOpacity>
@@ -43,7 +61,21 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
         <Text style={styles.text}>{userName}</Text>
-        <ProfilePost />
+        <FlatList
+          data={sortedPosts}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ProfilePost
+              key={item.postId}
+              id={item.id}
+              way={item.data.photo}
+              name={item.data.title}
+              //commentsNumber={item.data.comments.length}
+              country={item.data.photoLocation}
+              coords={item.data.geoLocation}
+            />
+          )}
+        />
       </View>
     </ImageBackground>
   );
