@@ -27,7 +27,6 @@ const ProfileScreen = () => {
   const userName = auth.currentUser?.displayName;
   const avatar = useSelector(selectAvatar);
   const posts = useSelector(selectPosts);
-  console.log(posts);
   const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
   const handleLogOut = () => {
     auth

@@ -84,14 +84,14 @@ const RegistrationScreen = () => {
     }
   };
 
-  const saveAvatar = async (imageUri, prefixFolder) => {
+  const saveAvatar = async (imageUri) => {
     const uniquePostId = Date.now().toString();
 
     if (imageUri) {
       try {
         const response = await fetch(imageUri);
         const file = await response.blob();
-        const storageRef = ref(storage, `${prefixFolder}/${uniquePostId}`);
+        const storageRef = ref(storage, `avatars/${uniquePostId}`);
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(imageRef);
         return downloadURL;
