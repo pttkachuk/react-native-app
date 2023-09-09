@@ -71,6 +71,7 @@ const PostScreen = () => {
         }}
         renderItem={({ item }) => (
           <PublicationsPost
+            key={item.postId}
             id={item.id}
             way={item.data.photo}
             name={item.data.title}
