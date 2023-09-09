@@ -65,6 +65,7 @@ const RegistrationScreen = () => {
     setLogin("");
     setEmail("");
     setPassword("");
+    setAvatar(null);
   };
 
   const pickImage = async () => {
